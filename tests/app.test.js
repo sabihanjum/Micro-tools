@@ -3,50 +3,85 @@
  * UI interaction tests
  */
 
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { JSDOM } from 'jsdom';
+import { describe, it, expect, beforeEach } from 'vitest';
 import fc from 'fast-check';
 
-// Set up DOM environment
-let dom;
+// Mock DOM elements
+class MockElement {
+  constructor() {
+    this.value = '';
+    this.textContent = '';
+    this.classList = new MockClassList();
+    this.dataset = {};
+  }
+}
+
+class MockClassList {
+  constructor() {
+    this.classes = new Set();
+  }
+  
+  add(className) {
+    this.classes.add(className);
+  }
+  
+  remove(className) {
+    this.classes.delete(className);
+  }
+  
+  contains(className) {
+    return this.classes.has(className);
+  }
+  
+  forEach(callback) {
+    this.classes.forEach(callback);
+  }
+}
+
+// Mock document
+let mockElements;
 let document;
-let window;
 
 beforeEach(() => {
-  // Create a fresh DOM for each test
-  dom = new JSDOM(`
-    <!DOCTYPE html>
-    <html>
-      <body>
-        <form id="calculator-form">
-          <input type="number" id="total-amount" />
-          <input type="number" id="number-of-people" />
-          <input type="number" id="tip-percentage" />
-          <button type="button" id="calculate-btn">Calculate</button>
-          <button type="button" id="reset-btn">Reset</button>
-          <button type="button" class="preset-btn" data-tip="10">10%</button>
-          <button type="button" class="preset-btn" data-tip="15">15%</button>
-          <button type="button" class="preset-btn" data-tip="18">18%</button>
-          <button type="button" class="preset-btn" data-tip="20">20%</button>
-        </form>
-        <div id="results" class="hidden">
-          <span id="result-original"></span>
-          <span id="result-tip-percent"></span>
-          <span id="result-tip-amount"></span>
-          <span id="result-total"></span>
-          <span id="result-per-person"></span>
-        </div>
-        <span class="error-message" id="amount-error"></span>
-        <span class="error-message" id="people-error"></span>
-        <span class="error-message" id="tip-error"></span>
-      </body>
-    </html>
-  `, { url: 'http://localhost' });
+  // Create mock elements
+  mockElements = {
+    'total-amount': new MockElement(),
+    'number-of-people': new MockElement(),
+    'tip-percentage': new MockElement(),
+    'calculate-btn': new MockElement(),
+    'reset-btn': new MockElement(),
+    'results': new MockElement(),
+    'result-original': new MockElement(),
+    'result-tip-percent': new MockElement(),
+    'result-tip-amount': new MockElement(),
+    'result-total': new MockElement(),
+    'result-per-person': new MockElement(),
+    'amount-error': new MockElement(),
+    'people-error': new MockElement(),
+    'tip-error': new MockElement(),
+  };
   
-  document = dom.window.document;
-  window = dom.window;
-  global.document = document;
-  global.window = window;
+  // Add preset buttons
+  const presetButtons = [
+    Object.assign(new MockElement(), { dataset: { tip: '10' } }),
+    Object.assign(new MockElement(), { dataset: { tip: '15' } }),
+    Object.assign(new MockElement(), { dataset: { tip: '18' } }),
+    Object.assign(new MockElement(), { dataset: { tip: '20' } }),
+  ];
+  
+  // Mock document
+  document = {
+    getElementById: (id) => mockElements[id],
+    querySelectorAll: (selector) => {
+      if (selector === '.preset-btn') {
+        return presetButtons;
+      }
+      return [];
+    },
+  };
+  
+  // Set initial state
+  mockElements['results'].classList.add('hidden');
 });
 
 describe('App Module - Property-Based Tests', () => {
