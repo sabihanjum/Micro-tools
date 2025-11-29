@@ -5,14 +5,7 @@ export default defineConfig({
   base: './',
   test: {
     globals: true,
-    environment: 'jsdom',
-    setupFiles: [],
-    environmentOptions: {
-      jsdom: {
-        resources: 'usable',
-      },
-    },
-    pool: 'forks',
+    environment: 'node',
   },
   build: {
     minify: 'esbuild',
