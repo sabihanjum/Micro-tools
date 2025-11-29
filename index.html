@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quick Split - Bill Splitter</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Quick Split</h1>
+      <p>Split bills quickly and fairly</p>
+    </header>
+
+    <main class="calculator-card">
+      <form id="calculator-form">
+        <div class="input-group">
+          <label for="total-amount">Total Amount</label>
+          <input 
+            type="number" 
+            id="total-amount" 
+            name="total-amount"
+            placeholder="0.00"
+            step="0.01"
+            min="0"
+            aria-describedby="amount-error"
+          >
+          <span class="error-message" id="amount-error"></span>
+        </div>
+
+        <div class="input-group">
+          <label for="number-of-people">Number of People</label>
+          <input 
+            type="number" 
+            id="number-of-people" 
+            name="number-of-people"
+            placeholder="2"
+            min="2"
+            aria-describedby="people-error"
+          >
+          <span class="error-message" id="people-error"></span>
+        </div>
+
+        <div class="input-group">
+          <label for="tip-percentage">Tip Percentage</label>
+          <div class="tip-presets">
+            <button type="button" class="preset-btn" data-tip="10">10%</button>
+            <button type="button" class="preset-btn" data-tip="15">15%</button>
+            <button type="button" class="preset-btn" data-tip="18">18%</button>
+            <button type="button" class="preset-btn" data-tip="20">20%</button>
+          </div>
+          <input 
+            type="number" 
+            id="tip-percentage" 
+            name="tip-percentage"
+            placeholder="0"
+            min="0"
+            max="100"
+            aria-describedby="tip-error"
+          >
+          <span class="error-message" id="tip-error"></span>
+        </div>
+
+        <div class="button-group">
+          <button type="button" id="calculate-btn" class="btn btn-primary">Calculate</button>
+          <button type="button" id="reset-btn" class="btn btn-secondary">Reset</button>
+        </div>
+      </form>
+
+      <div id="results" class="results hidden">
+        <h2>Results</h2>
+        <div class="result-item">
+          <span class="result-label">Original Amount:</span>
+          <span class="result-value" id="result-original"></span>
+        </div>
+        <div class="result-item">
+          <span class="result-label">Tip (<span id="result-tip-percent"></span>):</span>
+          <span class="result-value" id="result-tip-amount"></span>
+        </div>
+        <div class="result-item">
+          <span class="result-label">Total with Tip:</span>
+          <span class="result-value" id="result-total"></span>
+        </div>
+        <div class="result-item result-highlight">
+          <span class="result-label">Each Person Pays:</span>
+          <span class="result-value" id="result-per-person"></span>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
