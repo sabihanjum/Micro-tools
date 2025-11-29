@@ -6,6 +6,13 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
+    setupFiles: [],
+    environmentOptions: {
+      jsdom: {
+        resources: 'usable',
+      },
+    },
+    pool: 'forks',
   },
   build: {
     minify: 'esbuild',
